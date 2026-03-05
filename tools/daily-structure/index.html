@@ -23,13 +23,15 @@
 
 <button onclick="generate()">Generate</button>
 
-<pre id="output"></pre>
+<div id="output"></div>
 
 <script>
 async function generate() {
 
 const input = document.getElementById("input").value;
-const response = await fetch("https://daily-structure-worker.st63f.workers.dev",
+
+const response = await fetch(
+"https://daily-structure-worker.st63f.workers.dev",
 {
 method: "POST",
 headers: {
@@ -40,7 +42,26 @@ body: JSON.stringify({ input })
 
 const data = await response.json();
 
-document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+const output = `
+<h2>Anchor</h2>
+<p>${data.anchor}</p>
+
+<h2>Act</h2>
+<ul>
+${data.act.map(a => `<li>${a}</li>`).join("")}
+</ul>
+
+<h2>Avoid</h2>
+<p>${data.avoid}</p>
+
+<h2>Frame</h2>
+<p>${data.frame}</p>
+
+<h2>Reflection</h2>
+<p>${data.reflection}</p>
+`;
+
+document.getElementById("output").innerHTML = output;
 
 }
 </script>
