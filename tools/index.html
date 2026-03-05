@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tools | Hank Quellhorst</title>
+  <title>Tools</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
@@ -22,71 +22,84 @@
     }
 
     body {
-      height: 100vh;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
       background: linear-gradient(135deg, var(--red-dark), var(--red-main), var(--red-light));
       font-family: 'Inter', sans-serif;
       color: var(--text-cream);
     }
 
+    main {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 6vw, 5rem);
+      font-size: clamp(3rem, 7vw, 5rem);
       font-weight: 400;
-      text-align: center;
       letter-spacing: -1px;
     }
 
-    .nav {
-      margin-top: 80px;
-      display: flex;
-      gap: 60px;
-      font-size: 1.2rem;
+    .section-intro {
+      max-width: 56ch;
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: 0.88;
     }
 
-    .nav a {
-      text-decoration: none;
+    .content-container {
+      flex: 1;
+      border: 1px solid rgba(243, 230, 211, 0.28);
+      border-radius: 12px;
+      background: rgba(122, 15, 20, 0.12);
+      padding: 1.5rem;
+    }
+
+    .home-link {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      padding-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .home-link a {
       color: var(--text-cream);
-      font-weight: 500;
+      text-decoration: none;
+      opacity: 0.75;
       transition: opacity 0.2s ease;
     }
 
-    .nav a:hover {
-      opacity: 0.6;
-    }
-
-    .tools {
-      margin-top: 40px;
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    @media (max-width: 600px) {
-      .nav {
-        flex-direction: column;
-        gap: 20px;
-        align-items: center;
-      }
+    .home-link a:hover {
+      opacity: 1;
     }
   </style>
 </head>
 
 <body>
 
-<h1>Tools</h1>
+<main>
+  <h1>Tools</h1>
 
-<div class="nav">
-  <a href="/">Home</a>
-  <a href="/essays">Essays</a>
-  <a href="/apps">Apps</a>
-</div>
+  <p class="section-intro">
+    Systems, workflows, and utilities I build to solve problems and extend leverage.
+  </p>
 
-<div class="tools">
-  Systems, utilities, and frameworks I use.
+  <section class="content-container">
+
+    <p>Coming soon.</p>
+
+  </section>
+</main>
+
+<div class="home-link">
+  <a href="/">← Home</a>
 </div>
 
 </body>
