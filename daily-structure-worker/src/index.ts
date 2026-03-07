@@ -1,60 +1,77 @@
 export default {
   async fetch(request: Request, env: any) {
-    if (request.method !== "POST") {
-      return new Response("Method not allowed", { status: 405 });
-    }
 
-    const { input } = await request.json();
+	// Handle CORS preflight
+	if (request.method === "OPTIONS") {
+	  return new Response(null, {
+		headers: {
+		  "Access-Control-Allow-Origin": "*",
+		  "Access-Control-Allow-Methods": "POST, OPTIONS",
+		  "Access-Control-Allow-Headers": "Content-Type"
+		}
+	  });
+	}
 
-    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: `Translate the passage into structured clarity.
-No mysticism.
-No emotional drift.
-Slightly narrative tone, human but concise.
-Convert abstraction into bounded action.
+	if (request.method !== "POST") {
+	  return new Response("Method not allowed", { status: 405 });
+	}
 
-Return ONLY valid JSON in this format:
+	const { input } = await request.json();
 
-{
-  "anchor": "...",
-  "act": ["...", "...", "..."],
-  "avoid": "...",
-  "frame": "...",
-  "reflection": "..."
-}
+	const openaiResponse = await fetch(
+	  "https://api.openai.com/v1/chat/completions",
+	  {
+		method: "POST",
+		headers: {
+		  "Content-Type": "application/json",
+		  "Authorization": `Bearer ${env.OPENAI_API_KEY}`
+		},
+		body: JSON.stringify({
+		  model: "gpt-4o-mini",
+		  messages: [
+			{
+			  role: "system",
+				content: `
+				You translate information into clear daily structure.
 
-No commentary outside JSON.`
-          },
-          {
-            role: "user",
-            content: input
-          }
-        ]
-      })
-    });
+				Rules:
+				- No mysticism
+				- Translate insight into action
+				- Use plain human language
+				- Prefer concrete behavior over abstract advice
 
-    const data = await openaiResponse.json();
+				Return ONLY JSON in this structure:
 
-console.log("OpenAI raw response:", JSON.stringify(data));
+				{
+				  "anchor": "one sentence capturing the central signal",
+				  "act": [
+					"one concrete behavior someone could do today",
+					"one small observation they should make",
+					"one adjustment they could test"
+				  ],
+				  "avoid": "one common mistake or trap",
+				  "frame": "a short reframing that clarifies the situation",
+				  "reflection": "a thoughtful sentence that deepens understanding"
+				}
+				`
+			},
+			{
+			  role: "user",
+			  content: input
+			}
+		  ]
+		})
+	  }
+	);
 
-if (!data.choices) {
-return new Response(JSON.stringify(data), {
-headers: { "Content-Type": "application/json" },
-status: 500
-});
-}
-    return new Response(data.choices[0].message.content, {
-      headers: { "Content-Type": "application/json" }
-    });
+	const data = await openaiResponse.json();
+	const content = data.choices[0].message.content;
+
+	return new Response(content, {
+	  headers: {
+		"Content-Type": "application/json",
+		"Access-Control-Allow-Origin": "*"
+	  }
+	});
   }
 };
